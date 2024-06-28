@@ -1,0 +1,22 @@
+# Refer https://docs.halo.run/developer-guide/plugin/basics/manifest
+
+apiVersion: plugin.halo.run/v1alpha1
+kind: Plugin
+metadata:
+  # The name defines how the plugin is invoked, A unique name
+  name: injection-code
+spec:
+  enabled: true
+  requires: ">=2.11.0"
+  author:
+    name: Halo
+    website: https://github.com/halo-dev
+  logo: logo.png
+  homepage: https://github.com/halo-sigs/plugin-injection#readme
+  repo: https://github.com/halo-sigs/plugin-injection
+  issues: https://github.com/halo-sigs/plugin-injection/issues
+  displayName: "代码注入"
+  description: "这是一个管理HTML代码注入插件，提供详细的代码片段管理。用户可以添加、编辑、删除和启用/禁用代码片段，并通过特定规则匹配页面和注入位置"
+  license:
+    - name: "GPL-3.0"
+      url: "https://github.com/halo-sigs/plugin-injection/blob/main/LICENSE"
