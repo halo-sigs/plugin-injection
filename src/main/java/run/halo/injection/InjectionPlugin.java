@@ -1,6 +1,7 @@
 package run.halo.injection;
 
 import org.springframework.stereotype.Component;
+import run.halo.app.extension.Scheme;
 import run.halo.app.extension.SchemeManager;
 import run.halo.app.plugin.BasePlugin;
 import run.halo.app.plugin.PluginContext;
@@ -22,7 +23,7 @@ public class InjectionPlugin extends BasePlugin {
 
     @Override
     public void stop() {
-        schemeManager.unregister(schemeManager.get(HtmlInjection.class));
+        schemeManager.unregister(Scheme.buildFromType(HtmlInjection.class));
     }
 }
 

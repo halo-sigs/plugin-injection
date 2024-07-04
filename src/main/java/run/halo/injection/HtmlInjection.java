@@ -3,6 +3,7 @@ package run.halo.injection;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import run.halo.app.extension.AbstractExtension;
@@ -13,8 +14,8 @@ import run.halo.app.extension.GVK;
 @GVK(group = "theme.halo.run",
     version = "v1alpha1",
     kind = "HtmlInjection",
-    plural = "htmlInjections",
-    singular = "htmlInjection")
+    plural = "htmlinjections",
+    singular = "htmlinjection")
 public class HtmlInjection extends AbstractExtension {
 
     @Schema(requiredMode = REQUIRED)
@@ -28,17 +29,17 @@ public class HtmlInjection extends AbstractExtension {
         @Schema(description = "The description of the code snippet", maxLength = 500)
         private String description;
 
-        @Schema(description = "The content of the HTML", maxLength = 5000)
+        @Schema(description = "The content of the HTML")
         private String fragment;
 
         @Schema(description = "where to inject", allowableValues = {"HEADER", "FOOTER"})
         private InjectionPoint injectionPoint;
 
         @Schema(description = "The pages where the code snippet should be injected")
-        private String[] targetPages;
+        private Set<String> pageRules;
 
-        @Schema(description = "Whether the code snippet is enabled")
-        private boolean isEnabled;
+        @Schema(description = "Whether the code snippet is enabled", defaultValue = "false")
+        private boolean enabled;
     }
 
     public enum InjectionPoint {
