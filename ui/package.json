@@ -11,7 +11,14 @@
     "@halo-dev/components": "^2.12.0",
     "@halo-dev/console-shared": "^2.12.0",
     "canvas-confetti": "^1.9.2",
-    "vue": "^3.3.12"
+    "vue": "^3.3.12",
+    "@tanstack/vue-query": "5.51.0",
+    "@types/lodash-es": "4.17.12",
+    "axios": "1.7.2",
+    "dayjs": "1.11.11",
+    "fuse.js": "7.0.0",
+    "lodash-es": "4.17.21",
+    "vue-i18n": "9.13.1"
   },
   "devDependencies": {
     "@halo-dev/ui-plugin-bundler-kit": "^2.12.0",
