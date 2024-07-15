@@ -10,10 +10,7 @@ import {
 import axios from "axios";
 import type { HtmlInjection } from "@/types";
 import { cloneDeep } from 'lodash-es';
-import { useI18n } from "vue-i18n";
 
-
-const { t } = useI18n();
 
 // 接收 props
 const props = defineProps<{
@@ -138,8 +135,8 @@ const submitForm = () => {
 
 // 选项卡数据
 const tabs = ref([
-  { id: "form", label: t("基本信息")},
-  { id: "content", label: t("代码内容") }
+  { id: "form", label: '基本信息'},
+  { id: "content", label: '代码内容' }
 ]);
 
 // 当前激活的选项卡
@@ -150,7 +147,7 @@ const activeTab = ref("form");
 <template>
   <VModal
     :visible="visible"
-    :title="t('新增注入')"
+    :title="'新增注入'"
     :width="700"
     @update:visible="closeModal"
   >
@@ -181,11 +178,11 @@ const activeTab = ref("form");
             <FormKit
               id="name"
               name="name"
-              :label="t('名称')"
+              :label="'名称'"
               type="text"
               v-model="formData.name"
               validation="required|length:0,100"
-              :placeholder="t('请输入名称')"
+              :placeholder="'请输入名称'"
             />
           </div>
         </VCard>
@@ -195,11 +192,11 @@ const activeTab = ref("form");
             <FormKit
               id="description"
               name="description"
-              :label="t('代码描述')"
+              :label="'代码描述'"
               type="textarea"
               v-model="formData.description"
               validation="length:0,500"
-              :placeholder="t('请输入代码描述')"
+              :placeholder="'请输入代码描述'"
             />
           </div>
         </VCard>
@@ -209,7 +206,7 @@ const activeTab = ref("form");
             <FormKit
               id="injectionPoint"
               name="injectionPoint"
-              :label="t('注入点')"
+              :label="'注入点'"
               type="select"
               v-model="formData.injectionPoint"
               :options="[
@@ -225,10 +222,10 @@ const activeTab = ref("form");
             <FormKit
               id="pageRules"
               name="pageRules"
-              :label="t('匹配规则')"
+              :label="'匹配规则'"
               type="text"
               v-model="formData.pageRules"
-              :placeholder="t('请输入要注入的路径')"
+              :placeholder="'请输入要注入的路径'"
             />
           </div>
         </VCard>
@@ -238,7 +235,7 @@ const activeTab = ref("form");
             <FormKit
               id="isEnabled"
               name="isEnabled"
-              :label="t('启用')"
+              :label="'启用'"
               type="checkbox"
               v-model="formData.isEnabled"
             />
@@ -254,10 +251,10 @@ const activeTab = ref("form");
     <template #footer>
       <VSpace>
         <VButton type="secondary" @click="submitForm">
-          {{ t('core.common.buttons.submit') }}
+          提交
         </VButton>
         <VButton @click="closeModal">
-          {{ t('core.common.buttons.cancel_and_shortcut') }}
+          取消
         </VButton>
       </VSpace>
     </template>

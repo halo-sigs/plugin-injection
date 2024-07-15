@@ -16,16 +16,13 @@ import axios from "axios";
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
-import HtmlInjectionAdd from "./HtmlInjectionAdd.vue";
-import { useI18n } from "vue-i18n";
 import type { HtmlInjection, HtmlInjectionList } from "@/types";
+import HtmlInjectionAdd from "@/views/HtmlInjectionAdd.vue";
 
 // 初始化 Day.js 插件
 dayjs.extend(timezone);
 dayjs.extend(utc);
 
-// 使用 i18n
-const { t } = useI18n();
 
 // 变量定义
 const fuse = ref<Fuse<HtmlInjection> | null>(null);
@@ -96,10 +93,10 @@ const editHtmlInjection = (htmlInjection: HtmlInjection) => {
 // 删除代码注入
 const deleteHtmlInjection = (htmlInjection: HtmlInjection) => {
   Dialog.warning({
-    title: t("删除代码注入"),
-    description: t("确认要删除该代码注入吗？"),
-    confirmText: t("确认"),
-    cancelText: t("取消"),
+    title: "删除代码注入",
+    description: "确认要删除该代码注入吗？",
+    confirmText: "确认",
+    cancelText: "取消",
     onConfirm: () => {
       http
         .delete(`/apis/theme.halo.run/v1alpha1/htmlinjections/${htmlInjection.metadata.name}`)
@@ -161,13 +158,13 @@ onMounted(fetchHtmlInjections);
 <template>
   <div class="html-injection-list">
     <!-- 页面标题 -->
-    <VPageHeader :title="t('代码注入管理')">
+    <VPageHeader :title="'代码注入管理'">
       <template #actions>
         <VButton type="secondary" @click="openModal">
           <template #icon>
             <IconAddCircle class="h-full w-full" />
           </template>
-          {{ t('新增注入') }}
+          新增注入
         </VButton>
       </template>
     </VPageHeader>
@@ -175,21 +172,19 @@ onMounted(fetchHtmlInjections);
     <div class="m-0 md:m-4">
       <VCard :body-class="['!p-0']">
         <!-- 头部包含搜索和标签 -->
-        <template>
-          <header class="header">
+        <template #header>
             <div class="block w-full bg-gray-50 px-4 py-3">
               <div class="relative flex flex-col items-start sm:flex-row sm:items-center">
                 <div class="flex w-full flex-1 sm:w-auto">
-                  <SearchInput v-model="keyword" placeholder="t('请输入关键字')" />
+                  <SearchInput v-model="keyword" placeholder="请输入关键字" />
                 </div>
                 <div>
-                  <VButton :class="{ active: activeTab === 'All' }" @click="activeTab = 'All'">{{ t('全部') }}</VButton>
-                  <VButton :class="{ active: activeTab === 'Enabled' }" @click="activeTab = 'Enabled'">{{ t('启用') }}</VButton>
-                  <VButton :class="{ active: activeTab === 'Disabled' }" @click="activeTab = 'Disabled'">{{ t('禁用') }}</VButton>
+                  <VButton :class="{ active: activeTab === 'All' }" @click="activeTab = 'All'">全部</VButton>
+                  <VButton :class="{ active: activeTab === 'Enabled' }" @click="activeTab = 'Enabled'">启用</VButton>
+                  <VButton :class="{ active: activeTab === 'Disabled' }" @click="activeTab = 'Disabled'">禁用</VButton>
                 </div>
               </div>
             </div>
-          </header>
         </template>
 
         <!-- 代码注入列表 -->
@@ -217,14 +212,13 @@ onMounted(fetchHtmlInjections);
               </template>
               <template #dropdownItems>
                 <VDropdownItem type="danger" @click="deleteHtmlInjection(htmlInjection)">
-                  <!-- @ts-ignore -->
-                  {{ t("core.common.buttons.delete") }}
+                  删除
                 </VDropdownItem>
                 <VDropdownItem @click="editHtmlInjection(htmlInjection)">
-                  {{ t("修改") }}
+                  修改
                 </VDropdownItem>
                 <VDropdownItem @click="detailHtmlInjection(htmlInjection)">
-                  {{ t("详情") }}
+                  详情
                 </VDropdownItem>
               </template>
             </VEntity>
@@ -235,7 +229,7 @@ onMounted(fetchHtmlInjections);
         <template #footer>
           <div class="flex h-8 items-center">
             <span class="text-sm text-gray-500">
-              {{ t("core.components.pagination.total_label", { total: filteredTotal }) }}
+               共{{ filteredTotal }} 项数据
             </span>
           </div>
         </template>

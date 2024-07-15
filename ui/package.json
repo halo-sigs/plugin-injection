@@ -17,8 +17,7 @@
     "axios": "1.7.2",
     "dayjs": "1.11.11",
     "fuse.js": "7.0.0",
-    "lodash-es": "4.17.21",
-    "vue-i18n": "9.13.1"
+    "lodash-es": "4.17.21"
   },
   "devDependencies": {
     "@halo-dev/ui-plugin-bundler-kit": "^2.12.0",
