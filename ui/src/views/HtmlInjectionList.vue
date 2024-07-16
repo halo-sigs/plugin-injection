@@ -12,16 +12,10 @@ import {
   Dialog,
 } from '@halo-dev/components';
 import Fuse from "fuse.js";
-import dayjs from "dayjs";
-import timezone from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
 import type { HtmlInjection, HtmlInjectionList } from "@/types";
 import HtmlInjectionAdd from "@/views/HtmlInjectionAdd.vue";
 import { axiosInstance } from "@halo-dev/api-client";
-
-// 初始化 Day.js 插件
-dayjs.extend(timezone);
-dayjs.extend(utc);
+import { formatDatetime } from "@/utils/dateUtil";
 
 
 // 变量定义
@@ -115,11 +109,6 @@ const handleToggle = (htmlInjection: HtmlInjection) => {
     .then(() => {
       fetchHtmlInjections();
     });
-};
-
-// 格式化日期时间
-const formatDatetime = (date: string | Date | undefined | null, tz?: string): string => {
-  return date ? dayjs(date).tz(tz).format("YYYY-MM-DD HH:mm") : "";
 };
 
 // 计算属性定义
