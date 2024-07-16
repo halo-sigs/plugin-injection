@@ -29,7 +29,7 @@ const initialFormData = {
   name: '',
   description: '',
   fragment: '',
-  injectionPoint: 'HEADER',
+  injectionPoint: 'HEADER' as 'HEADER' | 'FOOTER',
   pageRules: '',
   isEnabled: false,
 };
@@ -64,10 +64,11 @@ const closeModal = () => {
 
 // 提交表单
 const submitForm = () => {
-  const requestData = {
+  const requestData: HtmlInjection= {
     apiVersion: 'theme.halo.run/v1alpha1',
     kind: 'HtmlInjection',
     metadata: {
+      name: props.htmlInjection ? props.htmlInjection.metadata.name : '',
       generateName: 'htmlinjection-', // 使用现有注入的名称
     },
     spec: {
@@ -75,11 +76,13 @@ const submitForm = () => {
       description: formData.value.description,
       fragment: formData.value.fragment,
       injectionPoint: formData.value.injectionPoint,
-      pageRules: Array.from(formData.value.pageRules.split(',').map((page) => page.trim())), // 转换为数组
+      pageRules: new Set(formData.value.pageRules.split(',').map(page => page.trim())), // 转换为Set，符合HtmlInjection接口类型
       enabled: formData.value.isEnabled,
     },
   };
 
+  console.log('Request Data:', requestData); 
+  
   const url = props.htmlInjection
     ? `/apis/theme.halo.run/v1alpha1/htmlinjections/${props.htmlInjection.metadata.name}`
     : '/apis/theme.halo.run/v1alpha1/htmlinjections';
@@ -88,7 +91,13 @@ const submitForm = () => {
   axiosInstance({
     method,
     url,
-    data: data
+    data: {
+      ...data,
+      spec: {
+        ...data.spec,
+        pageRules: Array.from(data.spec.pageRules)  // 在发送请求前将 Set 转换为数组，JSON 不支持 Set 类型，参考http://localhost:8090/webjars/swagger-ui/index.html#/HtmlInjectionV1alpha1/createHtmlInjection
+      }
+    }
   })
     .then(() => {
       emit('submit', formData.value);
@@ -138,8 +147,6 @@ const activeTab = ref("form");
         :config="{ validationVisibility: 'submit' }"
         :actions="false"
       >
-        <VCard :body-class="['!p-0', '!overflow-visible']" class="mb-4">
-          <div class="p-4">
             <FormKit
               id="name"
               name="name"
@@ -149,11 +156,6 @@ const activeTab = ref("form");
               validation="required|length:0,100"
               :placeholder="'请输入名称'"
             />
-          </div>
-        </VCard>
-
-        <VCard :body-class="['!p-0', '!overflow-visible']" class="mb-4">
-          <div class="p-4">
             <FormKit
               id="description"
               name="description"
@@ -163,11 +165,6 @@ const activeTab = ref("form");
               validation="length:0,500"
               :placeholder="'请输入代码描述'"
             />
-          </div>
-        </VCard>
-
-        <VCard :body-class="['!p-0', '!overflow-visible']" class="mb-4">
-          <div class="p-4">
             <FormKit
               id="injectionPoint"
               name="injectionPoint"
@@ -179,11 +176,6 @@ const activeTab = ref("form");
                 { value: 'FOOTER', label: 'Footer' }
               ]"
             />
-          </div>
-        </VCard>
-
-        <VCard :body-class="['!p-0', '!overflow-visible']" class="mb-4">
-          <div class="p-4">
             <FormKit
               id="pageRules"
               name="pageRules"
@@ -192,11 +184,6 @@ const activeTab = ref("form");
               v-model="formData.pageRules"
               :placeholder="'请输入要注入的路径'"
             />
-          </div>
-        </VCard>
-
-        <VCard :body-class="['!p-0', '!overflow-visible']" class="mb-4">
-          <div class="p-4">
             <FormKit
               id="isEnabled"
               name="isEnabled"
@@ -204,8 +191,6 @@ const activeTab = ref("form");
               type="checkbox"
               v-model="formData.isEnabled"
             />
-          </div>
-        </VCard>
       </FormKit>
     </div>
 

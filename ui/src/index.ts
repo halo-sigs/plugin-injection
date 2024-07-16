@@ -9,7 +9,7 @@ export default definePlugin({
     {
       parentName: "Root",
       route: {
-        path: "/HtmlInjection",
+        path: "/html-injection",
         name: "HtmlInjection",
         component: HtmlInjectionList,
         meta: {
