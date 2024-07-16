@@ -12,12 +12,12 @@ import {
   Dialog,
 } from '@halo-dev/components';
 import Fuse from "fuse.js";
-import axios from "axios";
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import type { HtmlInjection, HtmlInjectionList } from "@/types";
 import HtmlInjectionAdd from "@/views/HtmlInjectionAdd.vue";
+import { axiosInstance } from "@halo-dev/api-client";
 
 // 初始化 Day.js 插件
 dayjs.extend(timezone);
@@ -42,17 +42,10 @@ const keyword = ref("");
 const isModalVisible = ref(false);
 const activeTab = ref("All");
 
-// Axios 实例
-const http = axios.create({
-  baseURL: "/",
-  timeout: 1000,
-});
-
-
 // 函数定义
 // 获取代码注入列表
 const fetchHtmlInjections = async () => {
-  const response = await http.get<HtmlInjectionList>("/apis/theme.halo.run/v1alpha1/htmlinjections");
+  const response = await axiosInstance.get<HtmlInjectionList>("/apis/theme.halo.run/v1alpha1/htmlinjections");
   htmlInjections.value = response.data;
   fuse.value = new Fuse(response.data.items, {
     keys: ['spec.name', 'spec.description'],
@@ -98,7 +91,7 @@ const deleteHtmlInjection = (htmlInjection: HtmlInjection) => {
     confirmText: "确认",
     cancelText: "取消",
     onConfirm: () => {
-      http
+      axiosInstance
         .delete(`/apis/theme.halo.run/v1alpha1/htmlinjections/${htmlInjection.metadata.name}`)
         .then(() => {
           setTimeout(() => {
@@ -114,7 +107,7 @@ const deleteHtmlInjection = (htmlInjection: HtmlInjection) => {
 
 // 切换代码注入启用状态
 const handleToggle = (htmlInjection: HtmlInjection) => {
-  http
+  axiosInstance
     .put<HtmlInjection>(
       `/apis/theme.halo.run/v1alpha1/htmlinjections/${htmlInjection.metadata.name}`,
       htmlInjection

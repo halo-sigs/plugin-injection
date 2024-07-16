@@ -7,9 +7,9 @@ import {
   VSpace,
   VTabbar
 } from '@halo-dev/components';
-import axios from "axios";
 import type { HtmlInjection } from "@/types";
 import { cloneDeep } from 'lodash-es';
+import { axiosInstance } from "@halo-dev/api-client";
 
 // 接收 props
 const props = defineProps<{
@@ -23,12 +23,6 @@ const props = defineProps<{
 
 // 定义 emit 事件
 const emit = defineEmits(['close', 'submit']);
-
-// 创建 Axios 实例
-const http = axios.create({
-  baseURL: "/",
-  timeout: 1000,
-});
 
 // 初始化表单数据
 const initialFormData = {
@@ -91,7 +85,7 @@ const submitForm = () => {
     : '/apis/theme.halo.run/v1alpha1/htmlinjections';
   const method = props.htmlInjection ? 'put' : 'post';
   const data = method === 'put' ? { ...props.htmlInjection, spec: requestData.spec } : requestData;
-  http({
+  axiosInstance({
     method,
     url,
     data: data
