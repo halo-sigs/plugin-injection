@@ -238,8 +238,8 @@ onMounted(fetchHtmlInjections);
 
     <!-- 添加/编辑代码注入的模态窗口 -->
     <HtmlInjectionAdd
-      :visible="isModalVisible"
       :htmlInjection="currentHtmlInjection"
+      v-if="isModalVisible"
       @close="closeModal"
       @submit="handleFormSubmit"
     />

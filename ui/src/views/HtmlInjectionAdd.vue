@@ -11,26 +11,18 @@ import axios from "axios";
 import type { HtmlInjection } from "@/types";
 import { cloneDeep } from 'lodash-es';
 
-
 // 接收 props
 const props = defineProps<{
   /**
-   * 控制模态窗口的显示状态
-   * @type {boolean}
-   * @default false
-   */
-  visible: boolean;
-
-  /**
-   * 当前编辑的 HTML 注入对象，如果为空就是新增注入的逻辑
+   * 当前编辑的 HTML 注入对象，如果为空就是新增注入的逻辑，不为空就是修改选择的注入
    * @type {HtmlInjection | null}
    */
-  htmlInjection: HtmlInjection | null;
+  htmlInjection: HtmlInjection | null,
 }>();
 
 
 // 定义 emit 事件
-const emit = defineEmits(['update:visible', 'close', 'submit']);
+const emit = defineEmits(['close', 'submit']);
 
 // 创建 Axios 实例
 const http = axios.create({
@@ -50,11 +42,6 @@ const initialFormData = {
 
 const formData = ref(cloneDeep(initialFormData));
 
-// 重置表单数据
-const resetFormData = () => {
-  formData.value = cloneDeep(initialFormData);
-};
-
 // 更新表单数据
 const updateFormData = (currentHtmlInjection: HtmlInjection | null) => {
   if (currentHtmlInjection) {
@@ -66,8 +53,6 @@ const updateFormData = (currentHtmlInjection: HtmlInjection | null) => {
       pageRules: Array.from(currentHtmlInjection.spec.pageRules).join(', '),
       isEnabled: currentHtmlInjection.spec.enabled,
     };
-  } else {
-    resetFormData();
   }
 };
 
@@ -78,19 +63,8 @@ watch(
   { immediate: true }
 );
 
-// 监听 props.visible 的变化以在关闭模态窗口时重置表单
-watch(
-  () => props.visible,
-  (visible) => {
-    if (!visible) {
-      resetFormData();
-    }
-  }
-);
-
 // 关闭模态窗口
 const closeModal = () => {
-  emit('update:visible', false);
   emit('close');
 };
 
@@ -111,8 +85,6 @@ const submitForm = () => {
       enabled: formData.value.isEnabled,
     },
   };
-
-  //console.log('Request Data:', requestData);
 
   const url = props.htmlInjection
     ? `/apis/theme.halo.run/v1alpha1/htmlinjections/${props.htmlInjection.metadata.name}`
@@ -146,10 +118,9 @@ const activeTab = ref("form");
 
 <template>
   <VModal
-    :visible="visible"
     :title="'新增注入'"
     :width="700"
-    @update:visible="closeModal"
+    @close="closeModal()"
   >
     <div class="mt-5 divide-y divide-gray-100 md:col-span-3 md:mt-0">
       <VCard :body-class="['!p-0', '!overflow-visible']" class="mb-4">
