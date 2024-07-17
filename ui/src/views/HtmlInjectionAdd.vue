@@ -76,7 +76,7 @@ const submitForm = () => {
       description: formData.value.description,
       fragment: formData.value.fragment,
       injectionPoint: formData.value.injectionPoint,
-      pageRules: formData.value.pageRules, // 转换为Set，符合HtmlInjection接口类型
+      pageRules: formData.value.pageRules, 
       enabled: formData.value.isEnabled,
     },
   };

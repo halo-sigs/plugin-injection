@@ -160,11 +160,24 @@ onMounted(fetchHtmlInjections);
                 <div class="flex w-full flex-1 sm:w-auto">
                   <SearchInput v-model="keyword" placeholder="请输入关键字" />
                 </div>
-                <div>
-                  <VButton :class="{ active: activeTab === 'All' }" @click="activeTab = 'All'">全部</VButton>
-                  <VButton :class="{ active: activeTab === 'Enabled' }" @click="activeTab = 'Enabled'">启用</VButton>
-                  <VButton :class="{ active: activeTab === 'Disabled' }" @click="activeTab = 'Disabled'">禁用</VButton>
-                </div>
+                <FilterDropdown
+                  v-model="activeTab"
+                  :label="'状态'"
+                  :items="[
+                    {
+                      label: '全部',
+                       value: 'All',
+                    },
+                    {
+                      label: '已启用',
+                      value: 'Enabled',
+                    },
+                    {
+                      label: '未启用',
+                      value: 'Disabled',
+                    },
+                  ]"
+                />
               </div>
             </div>
         </template>
