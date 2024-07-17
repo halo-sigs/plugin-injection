@@ -30,7 +30,7 @@ const initialFormData = {
   description: '',
   fragment: '',
   injectionPoint: 'HEADER' as 'HEADER' | 'FOOTER',
-  pageRules: '',
+  pageRules: new Set<string>(),
   isEnabled: false,
 };
 
@@ -44,7 +44,7 @@ const updateFormData = (currentHtmlInjection: HtmlInjection | null) => {
       description: currentHtmlInjection.spec.description,
       fragment: currentHtmlInjection.spec.fragment,
       injectionPoint: currentHtmlInjection.spec.injectionPoint,
-      pageRules: Array.from(currentHtmlInjection.spec.pageRules).join(', '),
+      pageRules: currentHtmlInjection.spec.pageRules,
       isEnabled: currentHtmlInjection.spec.enabled,
     };
   }
@@ -76,12 +76,11 @@ const submitForm = () => {
       description: formData.value.description,
       fragment: formData.value.fragment,
       injectionPoint: formData.value.injectionPoint,
-      pageRules: new Set(formData.value.pageRules.split(',').map(page => page.trim())), // 转换为Set，符合HtmlInjection接口类型
+      pageRules: formData.value.pageRules, // 转换为Set，符合HtmlInjection接口类型
       enabled: formData.value.isEnabled,
     },
   };
-
-  console.log('Request Data:', requestData); 
+  
   
   const url = props.htmlInjection
     ? `/apis/theme.halo.run/v1alpha1/htmlinjections/${props.htmlInjection.metadata.name}`
@@ -177,13 +176,22 @@ const activeTab = ref("form");
               ]"
             />
             <FormKit
+              v-model="formData.pageRules"
               id="pageRules"
               name="pageRules"
-              :label="'匹配规则'"
-              type="text"
-              v-model="formData.pageRules"
-              :placeholder="'请输入要注入的路径'"
-            />
+              :label="'页面匹配规则'"
+              type="list"
+              item-type="string"
+              add-label="添加"
+            >
+              <template #default="{ index }">
+                <FormKit
+                  type="text"
+                  :index="index"
+                  help="用于匹配页面路径的正则表达式，如：/archives/**"
+                />
+              </template>
+            </FormKit>
             <FormKit
               id="isEnabled"
               name="isEnabled"

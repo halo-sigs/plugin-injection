@@ -4,7 +4,7 @@ export interface HtmlInjectionSpec {
   description: string;
   fragment: string;
   injectionPoint: 'HEADER' | 'FOOTER';
-  pageRules: Set<String>;
+  pageRules: Set<string>;
   enabled: boolean;
 }
 
