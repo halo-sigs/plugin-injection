@@ -30,7 +30,7 @@ const initialFormData = {
   description: '',
   fragment: '',
   injectionPoint: 'HEADER' as 'HEADER' | 'FOOTER',
-  pageRules: new Set<string>(),
+  pageRules: [] as string[],
   isEnabled: false,
 };
 
@@ -90,13 +90,7 @@ const submitForm = () => {
   axiosInstance({
     method,
     url,
-    data: {
-      ...data,
-      spec: {
-        ...data.spec,
-        pageRules: Array.from(data.spec.pageRules)  // 在发送请求前将 Set 转换为数组，JSON 不支持 Set 类型，参考http://localhost:8090/webjars/swagger-ui/index.html#/HtmlInjectionV1alpha1/createHtmlInjection
-      }
-    }
+    data
   })
     .then(() => {
       emit('submit', formData.value);

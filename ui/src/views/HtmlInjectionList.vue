@@ -224,7 +224,7 @@ onMounted(fetchHtmlInjections);
         <template #footer>
           <div class="flex h-8 items-center">
             <span class="text-sm text-gray-500">
-               共{{ filteredTotal }} 项数据
+               共 {{ filteredTotal }} 项数据
             </span>
           </div>
         </template>
