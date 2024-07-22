@@ -7,7 +7,7 @@ export default definePlugin({
   components: {},
   routes: [
     {
-      parentName: "Root",
+      parentName: "ToolsRoot",
       route: {
         path: "/html-injection",
         name: "HtmlInjection",
@@ -17,7 +17,6 @@ export default definePlugin({
           searchable: true,
           menu: {
             name: "代码注入管理",
-            group: "工具",
             icon: markRaw(IconPlug),
             priority: 0,
           },
