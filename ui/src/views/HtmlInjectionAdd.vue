@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import {
-  VCard,
   VButton,
   VModal,
-  VSpace,
-  VTabbar
+  VSpace
 } from '@halo-dev/components';
 import type { HtmlInjection } from "@/types";
 import { cloneDeep } from 'lodash-es';
@@ -101,37 +99,15 @@ const submitForm = () => {
     });
 };
 
-// 选项卡数据
-const tabs = ref([
-  { id: "form", label: '基本信息'},
-  { id: "content", label: '代码内容' }
-]);
-
-// 当前激活的选项卡
-const activeTab = ref("form");
-
 </script>
 
 <template>
   <VModal
-    :title="'新增注入'"
+    :title="props.htmlInjection ? '修改注入' : '新增注入'"
     :width="700"
     @close="closeModal()"
   >
     <div class="mt-5 divide-y divide-gray-100 md:col-span-3 md:mt-0">
-      <VCard :body-class="['!p-0', '!overflow-visible']" class="mb-4">
-        <template #header>
-          <VTabbar
-            v-model:active-id="activeTab"
-            :items="tabs.map((item) => ({ id: item.id, label: item.label }))"
-            class="w-full !rounded-none"
-            type="outline"
-          ></VTabbar>
-        </template>
-      </VCard>
-    </div>
-
-    <div class="mt-5 divide-y divide-gray-100 md:col-span-3 md:mt-0" v-show="activeTab === 'form'">
       <FormKit
         type="form"
         id="html-injection-form"
@@ -193,12 +169,17 @@ const activeTab = ref("form");
               type="checkbox"
               v-model="formData.isEnabled"
             />
+            <FormKit
+              type="code"
+              name="fragment"
+              id="fragment"
+              :label="'代码'"
+              :language="'html'"
+              :height="'200px'"
+              v-model="formData.fragment"
+            />
       </FormKit>
     </div>
-
-    <VCard :body-class="['!p-0', '!overflow-visible']" class="mb-4" v-show="activeTab === 'content'">
-      <VCodemirror v-model="formData.fragment" height="500px" language="html" />
-    </VCard>
 
     <template #footer>
       <VSpace>
