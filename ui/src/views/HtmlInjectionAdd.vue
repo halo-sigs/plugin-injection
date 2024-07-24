@@ -112,78 +112,32 @@ const submitForm = () => {
         type="form"
         id="html-injection-form"
         name="html-injection-form"
+        v-model="formData"
         @submit="submitForm"
         :config="{ validationVisibility: 'submit' }"
         :actions="false"
       >
-            <FormKit
-              id="name"
-              name="name"
-              :label="'名称'"
-              type="text"
-              v-model="formData.name"
-              validation="required|length:0,100"
-              :placeholder="'请输入名称'"
-            />
-            <FormKit
-              id="description"
-              name="description"
-              :label="'代码描述'"
-              type="textarea"
-              v-model="formData.description"
-              validation="length:0,500"
-              :placeholder="'请输入代码描述'"
-            />
-            <FormKit
-              id="injectionPoint"
-              name="injectionPoint"
-              :label="'注入点'"
-              type="select"
-              v-model="formData.injectionPoint"
+            <FormKit id="name" name="name" :label="'名称'" type="text" validation="required|length:1,100" :placeholder="'请输入名称'"/>
+            <FormKit id="description" name="description" :label="'代码描述'" type="textarea" validation="length:0,500" :placeholder="'请输入代码描述'"/>
+            <FormKit id="injectionPoint" name="injectionPoint" :label="'注入点'" type="select"
               :options="[
                 { value: 'HEADER', label: 'Header' },
                 { value: 'FOOTER', label: 'Footer' }
               ]"
             />
-            <FormKit
-              v-model="formData.pageRules"
-              id="pageRules"
-              name="pageRules"
-              :label="'页面匹配规则'"
-              type="list"
-              item-type="string"
-              add-label="添加"
-            >
+            <FormKit id="pageRules" name="pageRules" :label="'页面匹配规则'" type="list" item-type="string" add-label="添加">
               <template #default="{ index }">
-                <FormKit
-                  type="text"
-                  :index="index"
-                  help="用于匹配页面路径的正则表达式，如：/archives/**"
-                />
+                <FormKit type="text" :index="index" help="用于匹配页面路径的正则表达式，如：/archives/**"/>
               </template>
             </FormKit>
-            <FormKit
-              id="isEnabled"
-              name="isEnabled"
-              :label="'启用'"
-              type="checkbox"
-              v-model="formData.isEnabled"
-            />
-            <FormKit
-              type="code"
-              name="fragment"
-              id="fragment"
-              :label="'代码'"
-              :language="'html'"
-              :height="'200px'"
-              v-model="formData.fragment"
-            />
+            <FormKit id="isEnabled" name="isEnabled" :label="'启用'" type="checkbox"/>
+            <FormKit  id="fragment" name="fragment" :label="'代码'" type="code" :language="'html'" :height="'200px'"/>
       </FormKit>
     </div>
 
     <template #footer>
       <VSpace>
-        <VButton type="secondary" @click="submitForm">
+        <VButton type="secondary" @click="$formkit.submit('html-injection-form')">
           提交
         </VButton>
         <VButton @click="closeModal">
