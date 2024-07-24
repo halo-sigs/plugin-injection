@@ -137,6 +137,7 @@ const submitForm = () => {
 
     <template #footer>
       <VSpace>
+        <!-- @vue-ignore -->
         <VButton type="secondary" @click="$formkit.submit('html-injection-form')">
           提交
         </VButton>
