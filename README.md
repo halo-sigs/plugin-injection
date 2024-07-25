@@ -8,8 +8,8 @@
 所需环境：
 
 1. Java 17
-2. Node 18
-3. pnpm 8
+2. Node 20
+3. pnpm 9
 4. Docker (可选)
 
 克隆项目：
