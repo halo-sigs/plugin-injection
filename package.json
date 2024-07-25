@@ -1,0 +1,11 @@
+{
+	"dependencies": {
+		"@halo-dev/api-client": "^2.17.0",
+		"@halo-dev/ui-plugin-bundler-kit": "^2.17.0",
+		"axios": "^1.7.2",
+		"vite": "^5.3.3"
+	},
+	"devDependencies": {
+		"depcheck": "^1.4.7"
+	}
+}
