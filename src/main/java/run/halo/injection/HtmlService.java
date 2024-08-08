@@ -4,7 +4,7 @@ import reactor.core.publisher.Flux;
 
 public interface HtmlService {
 
-    Flux<HtmlInjection> getHeadEnabledInjections();
+    Flux<HtmlInjection> listEnabledHeadInjections();
 
-    Flux<HtmlInjection> getFooterEnabledInjections();
+    Flux<HtmlInjection> listEnabledFooterInjections();
 }

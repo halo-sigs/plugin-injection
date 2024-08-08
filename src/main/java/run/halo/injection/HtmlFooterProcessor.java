@@ -1,6 +1,5 @@
 package run.halo.injection;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,21 +10,18 @@ import org.thymeleaf.processor.element.IElementTagStructureHandler;
 import reactor.core.publisher.Mono;
 import run.halo.app.theme.dialect.TemplateFooterProcessor;
 
-
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class HtmlFooterProcessor extends AbstractHtmlProcessor  implements TemplateFooterProcessor {
-
+public class HtmlFooterProcessor extends AbstractHtmlProcessor implements TemplateFooterProcessor {
     private final HtmlService htmlService;
 
     @Override
     public Mono<Void> process(ITemplateContext context, IProcessableElementTag tag,
         IElementTagStructureHandler structureHandler, IModel model) {
-        return htmlService.getFooterEnabledInjections()
+        return htmlService.listEnabledFooterInjections()
             .doOnNext(htmlInjection -> {
-                if (htmlInjection != null && isContentTemplate(context)) {
+                if (isContentTemplate(context)) {
                     model.add(
                         context.getModelFactory().createText(
                             htmlInjection.getSpec().getFragment()));
@@ -37,5 +33,4 @@ public class HtmlFooterProcessor extends AbstractHtmlProcessor  implements Templ
             })
             .then();
     }
-
 }

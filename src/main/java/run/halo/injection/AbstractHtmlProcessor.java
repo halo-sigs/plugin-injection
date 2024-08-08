@@ -4,7 +4,6 @@ import java.util.Set;
 import org.thymeleaf.context.ITemplateContext;
 
 public abstract class AbstractHtmlProcessor {
-
     protected static final String TEMPLATE_ID_VARIABLE = "_templateId";
 
     protected boolean isContentTemplate(ITemplateContext context) {

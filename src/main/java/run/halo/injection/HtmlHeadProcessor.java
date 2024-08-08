@@ -9,20 +9,18 @@ import org.thymeleaf.processor.element.IElementModelStructureHandler;
 import reactor.core.publisher.Mono;
 import run.halo.app.theme.dialect.TemplateHeadProcessor;
 
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class HtmlHeadProcessor extends AbstractHtmlProcessor implements TemplateHeadProcessor {
-
     private final HtmlService htmlService;
 
     @Override
     public Mono<Void> process(ITemplateContext context, IModel model,
         IElementModelStructureHandler structureHandler) {
-        return htmlService.getHeadEnabledInjections()
+        return htmlService.listEnabledHeadInjections()
             .doOnNext(htmlInjection -> {
-                if (htmlInjection != null && isContentTemplate(context)) {
+                if (isContentTemplate(context)) {
                     model.add(
                         context.getModelFactory().createText(
                             htmlInjection.getSpec().getFragment()));
@@ -34,5 +32,4 @@ public class HtmlHeadProcessor extends AbstractHtmlProcessor implements Template
             })
             .then();
     }
-
 }
