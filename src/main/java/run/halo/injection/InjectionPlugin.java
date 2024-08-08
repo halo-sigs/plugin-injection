@@ -1,6 +1,5 @@
 package run.halo.injection;
 
-
 import static run.halo.app.extension.index.IndexAttributeFactory.simpleAttribute;
 
 import org.springframework.stereotype.Component;
@@ -9,7 +8,6 @@ import run.halo.app.extension.SchemeManager;
 import run.halo.app.extension.index.IndexSpec;
 import run.halo.app.plugin.BasePlugin;
 import run.halo.app.plugin.PluginContext;
-
 
 @Component
 public class InjectionPlugin extends BasePlugin {
@@ -34,7 +32,8 @@ public class InjectionPlugin extends BasePlugin {
             indexSpecs.add(new IndexSpec()
                 .setName("spec.injectionPoint")
                 .setIndexFunc(simpleAttribute(HtmlInjection.class, htmlInjection -> {
-                    HtmlInjection.InjectionPoint injectionPoint = htmlInjection.getSpec().getInjectionPoint();
+                    HtmlInjection.InjectionPoint injectionPoint =
+                        htmlInjection.getSpec().getInjectionPoint();
                     return injectionPoint != null ? injectionPoint.name() : "";
                 }))
             );
