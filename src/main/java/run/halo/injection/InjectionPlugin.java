@@ -34,7 +34,7 @@ public class InjectionPlugin extends BasePlugin {
                 .setIndexFunc(simpleAttribute(HtmlInjection.class, htmlInjection -> {
                     HtmlInjection.InjectionPoint injectionPoint =
                         htmlInjection.getSpec().getInjectionPoint();
-                    return injectionPoint != null ? injectionPoint.name() : "";
+                    return injectionPoint != null ? injectionPoint.name() : null;
                 }))
             );
         });

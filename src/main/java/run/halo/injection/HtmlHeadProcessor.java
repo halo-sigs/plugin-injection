@@ -18,7 +18,7 @@ public class HtmlHeadProcessor extends AbstractHtmlProcessor implements Template
     @Override
     public Mono<Void> process(ITemplateContext context, IModel model,
         IElementModelStructureHandler structureHandler) {
-        return htmlService.listEnabledHeadInjections()
+        return htmlService.listEnabledInjectionsByPoint(HtmlInjection.InjectionPoint.HEADER)
             .doOnNext(htmlInjection -> {
                 if (isContentTemplate(context)) {
                     model.add(

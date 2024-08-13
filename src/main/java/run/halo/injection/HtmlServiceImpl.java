@@ -17,29 +17,14 @@ public class HtmlServiceImpl implements HtmlService {
     private final ReactiveExtensionClient client;
 
     /**
-     * 获取启用的注入点为 HEAD 的 HtmlInjection 对象.
+     * 根据注入点获取正在启用的HtmlInjection 对象.
      */
-    public Flux<HtmlInjection> listEnabledHeadInjections() {
+    @Override
+    public Flux<HtmlInjection> listEnabledInjectionsByPoint(
+        HtmlInjection.InjectionPoint injectionPoint) {
         Query query = and(
             equal("spec.enabled", "true"),
-            equal("spec.injectionPoint", HtmlInjection.InjectionPoint.HEADER.name())
-        );
-
-        ListOptions options = ListOptions.builder()
-            .fieldQuery(query)
-            .build();
-
-        return client.listAll(HtmlInjection.class, options,
-            Sort.by(Sort.Order.asc("metadata.name")));
-    }
-
-    /**
-     * 获取启用的注入点为 FOOTER 的 HtmlInjection 对象.
-     */
-    public Flux<HtmlInjection> listEnabledFooterInjections() {
-        Query query = and(
-            equal("spec.enabled", "true"),
-            equal("spec.injectionPoint", HtmlInjection.InjectionPoint.FOOTER.name())
+            equal("spec.injectionPoint", injectionPoint.name())
         );
 
         ListOptions options = ListOptions.builder()

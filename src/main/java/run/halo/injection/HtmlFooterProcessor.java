@@ -19,7 +19,7 @@ public class HtmlFooterProcessor extends AbstractHtmlProcessor implements Templa
     @Override
     public Mono<Void> process(ITemplateContext context, IProcessableElementTag tag,
         IElementTagStructureHandler structureHandler, IModel model) {
-        return htmlService.listEnabledFooterInjections()
+        return htmlService.listEnabledInjectionsByPoint(HtmlInjection.InjectionPoint.FOOTER)
             .doOnNext(htmlInjection -> {
                 if (isContentTemplate(context)) {
                     model.add(
