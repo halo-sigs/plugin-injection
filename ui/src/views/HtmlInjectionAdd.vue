@@ -125,7 +125,7 @@ const submitForm = () => {
                 { value: 'FOOTER', label: 'Footer' }
               ]"
             />
-            <FormKit id="pageRules" name="pageRules" :label="'页面匹配规则'" type="list" item-type="string" add-label="添加">
+            <FormKit id="pageRules" name="pageRules" :label="'页面匹配规则'" validation="required" type="list" item-type="string" add-label="添加">
               <template #default="{ index }">
                 <FormKit type="text" :index="index" help="用于匹配页面路径的正则表达式，如：/archives/**"/>
               </template>

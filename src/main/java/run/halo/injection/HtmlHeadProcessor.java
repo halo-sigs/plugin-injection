@@ -20,7 +20,8 @@ public class HtmlHeadProcessor extends AbstractHtmlProcessor implements Template
         IElementModelStructureHandler structureHandler) {
         return htmlService.listEnabledInjectionsByPoint(HtmlInjection.InjectionPoint.HEADER)
             .doOnNext(htmlInjection -> {
-                if (isContentTemplate(context)) {
+                if (isRequestPathMatchingRoute(context, htmlInjection.getSpec().getPageRules())
+                    && isContentTemplate(context)) {
                     model.add(
                         context.getModelFactory().createText(
                             htmlInjection.getSpec().getFragment()));
