@@ -21,7 +21,7 @@ public class HtmlFooterProcessor extends AbstractHtmlProcessor implements Templa
         IElementTagStructureHandler structureHandler, IModel model) {
         return htmlService.listEnabledInjectionsByPoint(HtmlInjection.InjectionPoint.FOOTER)
             .doOnNext(htmlInjection -> {
-                if (isContentTemplate(context)) {
+                if (isRequestPathMatchingRoute(context, htmlInjection.getSpec().getPageRules())) {
                     model.add(
                         context.getModelFactory().createText(
                             htmlInjection.getSpec().getFragment()));
