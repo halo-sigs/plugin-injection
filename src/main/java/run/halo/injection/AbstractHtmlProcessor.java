@@ -13,13 +13,7 @@ import org.thymeleaf.web.IWebRequest;
 
 @Slf4j
 public abstract class AbstractHtmlProcessor {
-    protected static final String TEMPLATE_ID_VARIABLE = "_templateId";
     private final RouteMatcher routeMatcher = createRouteMatcher();
-
-    protected boolean isContentTemplate(ITemplateContext context) {
-        return "post".equals(context.getVariable(TEMPLATE_ID_VARIABLE))
-            || "page".equals(context.getVariable(TEMPLATE_ID_VARIABLE));
-    }
 
     private RouteMatcher createRouteMatcher() {
         PathPatternParser parser = new PathPatternParser();
