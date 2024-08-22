@@ -2,7 +2,9 @@ package run.halo.injection;
 
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.server.PathContainer;
 import org.springframework.util.RouteMatcher;
+import org.springframework.web.util.pattern.PathPatternParser;
 import org.springframework.web.util.pattern.PathPatternRouteMatcher;
 import org.springframework.web.util.pattern.PatternParseException;
 import org.thymeleaf.context.Contexts;
@@ -12,11 +14,17 @@ import org.thymeleaf.web.IWebRequest;
 @Slf4j
 public abstract class AbstractHtmlProcessor {
     protected static final String TEMPLATE_ID_VARIABLE = "_templateId";
-    private final PathPatternRouteMatcher routeMatcher = new PathPatternRouteMatcher();
+    private final RouteMatcher routeMatcher = createRouteMatcher();
 
     protected boolean isContentTemplate(ITemplateContext context) {
         return "post".equals(context.getVariable(TEMPLATE_ID_VARIABLE))
             || "page".equals(context.getVariable(TEMPLATE_ID_VARIABLE));
+    }
+
+    private RouteMatcher createRouteMatcher() {
+        PathPatternParser parser = new PathPatternParser();
+        parser.setPathOptions(PathContainer.Options.HTTP_PATH);
+        return new PathPatternRouteMatcher(parser);
     }
 
     // 匹配路径
