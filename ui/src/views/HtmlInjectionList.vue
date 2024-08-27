@@ -40,13 +40,12 @@ const activeTab = ref("All");
 // 获取代码注入列表
 const fetchHtmlInjections = async () => {
   const response = await axiosInstance.get<HtmlInjectionList>("/apis/theme.halo.run/v1alpha1/htmlinjections");
-  htmlInjections.value = response.data;
+  htmlInjections.value = response.data as HtmlInjectionList;
   fuse.value = new Fuse(response.data.items, {
     keys: ['spec.name', 'spec.description'],
     threshold: 0.3,
   });
-  //console.log('fetch data:', response.data);
-
+  console.log('fetch data:', response.data);
 };
 
 // 打开模态窗口
@@ -116,7 +115,7 @@ const handleToggle = (htmlInjection: HtmlInjection) => {
 const filteredHtmlInjections = computed(() => {
   let results = htmlInjections.value.items;
   if (keyword.value && fuse.value) {
-    results = fuse.value.search(keyword.value).map(result => result.item);
+    results = fuse.value.search(keyword.value).map(result => result.item as HtmlInjection);
   }
   if (activeTab.value === "Enabled") {
     return results.filter(htmlInjection => htmlInjection.spec.enabled);
