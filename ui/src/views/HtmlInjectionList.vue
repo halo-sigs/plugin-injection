@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import {ref, computed, onMounted} from 'vue';
 import {
   VCard,
   VPageHeader,
@@ -12,10 +12,11 @@ import {
   Dialog,
 } from '@halo-dev/components';
 import Fuse from "fuse.js";
-import type { HtmlInjection, HtmlInjectionList } from "@/types";
-import HtmlInjectionAdd from "@/views/HtmlInjectionAdd.vue";
-import { axiosInstance } from "@halo-dev/api-client";
-import { formatDatetime } from "@/utils/dateUtil";
+import type {HtmlInjection, HtmlInjectionList} from "@/types";
+import HtmlInjectionEditionModal from "@/views/HtmlInjectionEditionModal.vue";
+import HtmlInjectionCreationModal from "@/views/HtmlInjectionCreationModal.vue";
+import {axiosInstance} from "@halo-dev/api-client";
+import {formatDatetime} from "@/utils/dateUtil";
 
 
 // 变量定义
@@ -33,39 +34,49 @@ const htmlInjections = ref<HtmlInjectionList>({
 });
 const currentHtmlInjection = ref<HtmlInjection | null>(null);
 const keyword = ref("");
-const isModalVisible = ref(false);
+const isEditionModalVisible = ref(false);
+const isCreationModalVisible = ref(false);
 const activeTab = ref("All");
 
 // 函数定义
 // 获取代码注入列表
 const fetchHtmlInjections = async () => {
   const response = await axiosInstance.get<HtmlInjectionList>("/apis/theme.halo.run/v1alpha1/htmlinjections");
-  htmlInjections.value = response.data;
+  htmlInjections.value = response.data as HtmlInjectionList;
   fuse.value = new Fuse(response.data.items, {
     keys: ['spec.name', 'spec.description'],
     threshold: 0.3,
   });
-  //console.log('fetch data:', response.data);
-
 };
 
 // 打开模态窗口
-const openModal = () => {
+const openCreationModal = () => {
   currentHtmlInjection.value = null;  // 创建新注入时清空 currentHtmlInjection
-  isModalVisible.value = true;
+  isCreationModalVisible.value = true;
+};
+const openEditionModal = () => {
+  isEditionModalVisible.value = true;
 };
 
 // 关闭模态窗口
-const closeModal = () => {
-  isModalVisible.value = false;
-};
+function closeCreationModal() {
+  isCreationModalVisible.value = false;
+}
 
-// 表单提交
-const handleFormSubmit = () => {
+function closeEditionModal() {
+  isEditionModalVisible.value = false;
+}
+
+// 更新成功
+const onUpdateHtmlInjectionSuccess = () => {
   fetchHtmlInjections();
-  closeModal();
+  closeEditionModal();
 };
-
+// 新增成功
+const onCreateHtmlInjectionSuccess = () => {
+  fetchHtmlInjections();
+  closeCreationModal();
+};
 // 跳转到注入详情页面
 const detailHtmlInjection = (htmlInjection: HtmlInjection) => {
   console.log('TODO-跳转到详情页面');
@@ -74,7 +85,7 @@ const detailHtmlInjection = (htmlInjection: HtmlInjection) => {
 // 编辑代码注入
 const editHtmlInjection = (htmlInjection: HtmlInjection) => {
   currentHtmlInjection.value = htmlInjection;
-  isModalVisible.value = true;
+  openEditionModal();
 };
 
 // 删除代码注入
@@ -116,7 +127,7 @@ const handleToggle = (htmlInjection: HtmlInjection) => {
 const filteredHtmlInjections = computed(() => {
   let results = htmlInjections.value.items;
   if (keyword.value && fuse.value) {
-    results = fuse.value.search(keyword.value).map(result => result.item);
+    results = fuse.value.search(keyword.value).map(result => result.item as HtmlInjection);
   }
   if (activeTab.value === "Enabled") {
     return results.filter(htmlInjection => htmlInjection.spec.enabled);
@@ -142,9 +153,9 @@ onMounted(fetchHtmlInjections);
     <!-- 页面标题 -->
     <VPageHeader :title="'代码注入管理'">
       <template #actions>
-        <VButton type="secondary" @click="openModal">
+        <VButton type="secondary" @click="openCreationModal">
           <template #icon>
-            <IconAddCircle class="h-full w-full" />
+            <IconAddCircle class="h-full w-full"/>
           </template>
           新增注入
         </VButton>
@@ -155,15 +166,15 @@ onMounted(fetchHtmlInjections);
       <VCard :body-class="['!p-0']">
         <!-- 头部包含搜索和标签 -->
         <template #header>
-            <div class="block w-full bg-gray-50 px-4 py-3">
-              <div class="relative flex flex-col items-start sm:flex-row sm:items-center">
-                <div class="flex w-full flex-1 sm:w-auto">
-                  <SearchInput v-model="keyword" placeholder="请输入关键字" />
-                </div>
-                <FilterDropdown
-                  v-model="activeTab"
-                  :label="'状态'"
-                  :items="[
+          <div class="block w-full bg-gray-50 px-4 py-3">
+            <div class="relative flex flex-col items-start sm:flex-row sm:items-center">
+              <div class="flex w-full flex-1 sm:w-auto">
+                <SearchInput v-model="keyword" placeholder="请输入关键字"/>
+              </div>
+              <FilterDropdown
+                v-model="activeTab"
+                :label="'状态'"
+                :items="[
                     {
                       label: '全部',
                        value: 'All',
@@ -177,9 +188,9 @@ onMounted(fetchHtmlInjections);
                       value: 'Disabled',
                     },
                   ]"
-                />
-              </div>
+              />
             </div>
+          </div>
         </template>
 
         <!-- 代码注入列表 -->
@@ -230,13 +241,19 @@ onMounted(fetchHtmlInjections);
         </template>
       </VCard>
     </div>
-
-    <!-- 添加/编辑代码注入的模态窗口 -->
-    <HtmlInjectionAdd
+    <!-- 新增注入的模态窗口 -->
+    <HtmlInjectionCreationModal
+      v-if="isCreationModalVisible"
       :htmlInjection="currentHtmlInjection"
-      v-if="isModalVisible"
-      @close="closeModal"
-      @submit="handleFormSubmit"
+      @close="closeCreationModal"
+      @success="onCreateHtmlInjectionSuccess"
+    />
+    <!-- 编辑注入的模态窗口 -->
+    <HtmlInjectionEditionModal
+      v-if="isEditionModalVisible"
+      :htmlInjection="currentHtmlInjection"
+      @close="closeEditionModal"
+      @success="onUpdateHtmlInjectionSuccess"
     />
   </div>
 </template>
